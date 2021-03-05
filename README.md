@@ -1,5 +1,5 @@
 # WebToWeb
-Simple application done in Ionic, Angular, Electron and WebRTC
+Simple application done with Ionic, Angular, Electron and .NET Core
 
 Steps to use the application:
 * Download the code or clone the repository
