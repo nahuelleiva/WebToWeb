@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Instance } from 'simple-peer';
-// import * as SimplePeer from 'simple-peer';
 import { PeerData, UserInfo } from '../../models/peer-data';
 
 declare var SimplePeer: any;
