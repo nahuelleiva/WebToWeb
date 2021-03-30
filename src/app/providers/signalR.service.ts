@@ -27,7 +27,7 @@ export class SignalrService {
   public async startConnection(currentUser: string): Promise<void> {
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:5001/signalrtc')
+      .withUrl('https://atencionremota.sidesys.com/webtowebserver/signalrtc')
       .build();
       
     await this.hubConnection.start();

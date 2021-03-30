@@ -32,6 +32,10 @@ export class WebRtcService {
     this.users$ = this.users.asObservable();
   }
 
+  public getUser(id: string): UserInfo {
+    return this.users.getValue().find(user => { return user.connectionId = id });
+  }
+
   public newUser(user: UserInfo): void {
     this.users.next([...this.users.getValue(), user]);
   }
@@ -48,8 +52,8 @@ export class WebRtcService {
       config: {
         iceServers: [
           { urls: 'stun:stun.atencionremota.sidesys.com:3478' },
-          { urls: 'stun:turn.atencionremota.sidesys.com:3478?transport=tcp', credential: '12345', username: 'test'},
-          { urls: 'stun:turn.atencionremota.sidesys.com:3478?transport=udp', credential: '12345', username: 'test'}
+          { urls: 'stun:turn.atencionremota.sidesys.com:3478?transport=tcp', credential: '12345', username: 'test' },
+          { urls: 'stun:turn.atencionremota.sidesys.com:3478?transport=udp', credential: '12345', username: 'test' }
         ]
       },
       stream: stream

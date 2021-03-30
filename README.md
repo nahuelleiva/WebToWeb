@@ -11,3 +11,5 @@ Steps to use the application:
 * Copy the localhost URL and paste it into another browser window or new tab.
 * Enter a username, click the "Save" button. Do the same in the other browser window. This will tell the application that there's two people connected in the room.
 * In one of the windows just click the name is displayed and the video will start running in both browser windows.
+* For compile app on executable for MAC OS or Windows use ```npm run electron:mac``` or ```npm run electron:win``` respectively.
+* For create Windows installer run the next command ```node build_installer.js```.

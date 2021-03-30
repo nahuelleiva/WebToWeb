@@ -1,57 +1,65 @@
-<div class="container-fluid">
-  <h1>SignalRTC</h1>
-  <div class="row">
-    <div class="col-5">
-      <div class="row">
-        <div class="col">
-          <input [(ngModel)]="currentUser" required placeholder="UserName" type="text">
+<div class="container-fluid" style="height: 100%;">
+  <h3>SignalR - WebRTC - Video Call</h3>
+  <div *ngIf="!complete" class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <div class="container row pt-5 pb-5" style="background: rgb(0 0 0 / 10%);">
+        <div class="col-12">
+          <b>Complete los datos para ingresar a la sala</b>
         </div>
-        <div class="col">
-          <div class="btn-group" role="group" aria-label="button group">
-            <button [disabled]="!currentUser" (click)="saveUsername()" type="button"
-              class="btn btn-sm btn-primary">Save</button>
+        <input class="col-12 mb-3" [(ngModel)]="currentUser" required placeholder="UserName" type="text">
+        <small class="col-12" *ngIf="currentUser && currentUser.length > 0 && currentUser.length < 5"
+          style="color: red;">
+          Mínimo requerido de 5 caracteres
+        </small>
+        <div class="col-12">
+          <div class="d-flex justify-content-end" role="group" aria-label="button group">
+            <button [disabled]="!currentUser || (currentUser && currentUser.length < 5)" (click)="saveUsername()"
+              type="button" class="btn btn-sm btn-primary">Guardar</button>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <app-user-list (userSelected)="onUserSelected($event)"></app-user-list>
-        </div>
-      </div>
     </div>
-    <div class="col-7">
-      <div class="row">
-        <div class="col-8">
-          <input [(ngModel)]="dataString" required placeholder="Write a message" type="text">
-        </div>
-        <div class="col-4">
-          <button (click)="sendMessage()" type="button" class="btn btn-sm btn-secondary">Send</button>
-        </div>
+    <div class="col-4"></div>
+  </div>
+  <div *ngIf="complete" class="row" style="height: calc(100% - 40px);">
+    <div class="col-12">
+      Bienvenido {{ currentUser }}
+    </div>
+    <div class="col-9" style="background: black; height: inherit;">
+      <h1 *ngIf="streaming && userVideo" style="position: absolute; bottom: 20px; left: 40px; color: white;">
+        {{userVideoName}}
+      </h1>
+      <h1 *ngIf="!streaming" style="position: absolute; bottom: 20px; left: 40px; color: white;">Yo</h1>
+      <video #videoPlayer style="width: 100%; height: 100%; object-fit: fill;"></video>
+      <video #me *ngIf="streaming" class="mt-1"
+        style="position: absolute;left: 20px;width: 100px;height: 100px;object-fit: fill;border: solid white;"></video>
+      <b *ngIf="streaming" class="mt-2" style="position: absolute;left: 30px;color: white;">Yo</b>
+    </div>
+    <div class="col-3 p-0" style="background: gray; height: inherit;">
+      <div style="color: white;" class="text-center">
+        <b *ngIf="!streaming">Usuarios para realizar una reunión</b>
+        <b *ngIf="streaming">Chat</b>
       </div>
-      <div class="row mt-4">
-        <div class="col">
-
+      <app-user-list *ngIf="!streaming" (userSelected)="onUserSelected($event)"></app-user-list>
+      <div *ngIf="streaming" style="width: inherit;">
+        <div class="row" style="position: fixed; bottom: 20px; right: 0; width: inherit;">
+          <input class="col" [(ngModel)]="dataString" required placeholder="Escriba su mensaje a enviar" type="text">
+          <div class="col-3">
+            <button (click)="sendMessage()" type="button" class="btn btn-sm btn-secondary">Enviar</button>
+          </div>
+        </div>
+        <div class="row" style="position: absolute; bottom: 60px; right: 0;">
           <div class="chat-box">
-
             <ng-container *ngFor="let message of messages">
-              <div [ngClass]="{'my-message': message.own, 'other-message': !message.own}">
+              <div class="badge text-light m-2" [ngClass]="{'bg-warning': !message.own, 'bg-primary': message.own}">
                 {{message.message}}
               </div>
+              <br>
             </ng-container>
           </div>
         </div>
-
       </div>
-    </div>
-  </div>
-  <div class="row mt-4">
-    <div class="col">
-      <h5 *ngIf="userVideo">{{userVideo}}</h5>
-    </div>
-  </div>
-  <div class="row mt-4">
-    <div class="col">
-      <video #videoPlayer width="320" height="240" controls></video>
     </div>
   </div>
 </div>

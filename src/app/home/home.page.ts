@@ -12,16 +12,22 @@ import { UserInfo, PeerData, SignalInfo, ChatMessage } from '../../models/peer-d
 export class HomePage implements OnInit, OnDestroy {
   
   @ViewChild('videoPlayer') videoPlayer: ElementRef;
+  @ViewChild('me') me: ElementRef;
 
   public subscriptions = new Subscription();
 
   private stream;
+
+  public complete = false;
+
+  public streaming = false;
 
   public currentUser: string;
 
   public dataString: string;
 
   public userVideo: string;
+  public userVideoName: string;
 
   public messages: Array<ChatMessage>;
 
@@ -59,10 +65,18 @@ export class HomePage implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.add(this.webRtcService.onStream$.subscribe((data: PeerData) => {
+      this.streaming = true;
       this.userVideo = data.id;
+      this.userVideoName = this.webRtcService.getUser(data.id).userName;
       this.videoPlayer.nativeElement.srcObject = data.data;
       this.videoPlayer.nativeElement.load();
       this.videoPlayer.nativeElement.play();
+
+      setTimeout(() => {
+        this.me.nativeElement.srcObject = this.stream;
+        this.me.nativeElement.load();
+        this.me.nativeElement.play();        
+      }, 1000);
     }));
   }
 
@@ -74,7 +88,11 @@ export class HomePage implements OnInit, OnDestroy {
   public async saveUsername(): Promise<void> {
     try {
       await this.signalR.startConnection(this.currentUser);
+      this.complete = true;
       this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      this.videoPlayer.nativeElement.srcObject = this.stream;
+      this.videoPlayer.nativeElement.load();
+      this.videoPlayer.nativeElement.play();
     } catch (error) {
       console.error(`Can't join room, error ${error}`);
     }
